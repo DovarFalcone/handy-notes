@@ -5,10 +5,10 @@ from dash.dependencies import Input, Output
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import plotly.graph_objs as go
+import joblib
 
 # load the pre-trained machine learning model
-model = LinearRegression()
-model.load('model.pkl')
+model = joblib.load('model.pkl')
 
 # define the app
 app = dash.Dash(__name__)
