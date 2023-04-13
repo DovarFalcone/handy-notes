@@ -1,0 +1,25 @@
+To query for the lower type in the unacceptablevalues array of your JSON, you can use the ->> and #> operators in PostgreSQL.
+
+Here's an example query that assumes your JSON is stored in a column called my_column and you want to retrieve the limit value associated with the lower type for a row with id equal to 1:
+
+sql
+
+SELECT my_column #> '{unacceptablevalues, 0, limit}' AS lower_limit
+FROM my_table
+WHERE id = 1
+  AND my_column -> 'unacceptablevalues' @> '[{"type": "lower"}]'::jsonb;
+
+In this query, we're using the #> operator to navigate through the JSON and retrieve the value associated with the limit key for the first object in the unacceptablevalues array. The #> operator takes an array of keys as input, so we're using {unacceptablevalues, 0, limit} to specify that we want to retrieve the limit key from the first object in the unacceptablevalues array.
+
+The AND clause in the query is used to filter the rows to only those that contain an object in the unacceptablevalues array with a type key equal to "lower". We're using the @> operator to check if the unacceptablevalues array contains a JSONB object that matches the filter condition [{"type": "lower"}].
+
+If you need to retrieve other values from the JSON, you can adjust the keys in the #> operator accordingly. For example, if you wanted to retrieve the type value for the first object in the unacceptablevalues array, you could use the following:
+
+sql
+
+SELECT my_column #>> '{unacceptablevalues, 0, type}' AS lower_type
+FROM my_table
+WHERE id = 1
+  AND my_column -> 'unacceptablevalues' @> '[{"type": "lower"}]'::jsonb;
+
+This query uses the #>> operator to retrieve the text value associated with the type key in the first object of the unacceptablevalues array.
