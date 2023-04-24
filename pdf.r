@@ -1,32 +1,23 @@
-library(fpdf)
+library(ReporteRs)
 library(jsonlite)
 
 # Load the JSON object from a file
 data <- fromJSON("data.json")
 
-# Create a new PDF document
-pdf <- PDF()
+# Create a new document object
+doc <- docx()
 
-# Define the table header
+# Add a header to the document
+doc <- addParagraph(doc, "My JSON Data", style = "Title")
+
+# Add a table to the document
 header <- c("Key", "Value")
+data_rows <- lapply(names(data), function(nm) {
+  row <- as.data.frame(t(c(nm, data[[nm]])))
+  colnames(row) <- header
+  return(row)
+})
+doc <- addFlexTable(doc, value = data_rows, header.columns = header)
 
-# Add the table header to the PDF
-pdf <- AddPage()
-pdf <- SetFont("Arial", "B", 16)
-for (i in 1:length(header)) {
-  pdf <- Cell(50, 10, header[i], 1)
-}
-pdf <- Ln()
-
-# Add the data to the PDF
-pdf <- SetFont("Arial", "", 12)
-for (i in 1:length(data)) {
-  for (j in 1:length(header)) {
-    pdf <- Cell(50, 10, names(data)[i], 1)
-    pdf <- Cell(50, 10, data[[i]], 1)
-  }
-  pdf <- Ln()
-}
-
-# Save the PDF file
-pdf <- Output("output.pdf", "F")
+# Save the document
+writeDoc(doc, file = "output.docx")
