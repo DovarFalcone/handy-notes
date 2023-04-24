@@ -30,7 +30,8 @@ flat_data <- tryCatch({
     mutate(key = gsub("\\.", " ", key),
            key = tolower(key),
            key = tools::toTitleCase(key)) %>%
-    select(key, value)
+    select(key, value) %>%
+    distinct()
 }, error = function(e) {
   stop("Failed to flatten JSON data: ", e$message)
 })
