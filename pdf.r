@@ -8,7 +8,7 @@ library(kableExtra)
 
 # Define input and output file paths
 input_path <- "path/to/your/file.json"
-output_path <- "path/to/output/file.pdf"
+output_path <- "path/to/output/file.html"
 
 # Read in the JSON file
 tryCatch({
@@ -39,15 +39,15 @@ if (nrow(flat_data) == 0) {
 
 # Convert the data frame to a knitr kable object
 kable_data <- tryCatch({
-  kable(flat_data, "latex", booktabs = TRUE) %>%
-    kable_styling(latex_options = c("striped", "HOLD_position"))
+  kable(flat_data, "html", row.names = FALSE) %>%
+    kable_styling("striped", full_width = FALSE)
 }, error = function(e) {
   stop("Failed to convert data to kable format: ", e$message)
 })
 
-# Write the kable object to a PDF file
+# Write the kable object to an HTML file
 tryCatch({
   cat(kable_data, file = output_path)
 }, error = function(e) {
-  stop("Failed to write PDF file: ", e$message)
+  stop("Failed to write HTML file: ", e$message)
 })
