@@ -1,23 +1,32 @@
+library(fpdf)
 library(jsonlite)
 
 # Load the JSON object from a file
 data <- fromJSON("data.json")
 
-# Convert the list to a data frame with an index column
-df <- as.data.frame(data)
-df$index <- 1:nrow(df)
-rownames(df) <- paste0("row", df$index)
+# Create a new PDF document
+pdf <- PDF()
 
-# Open a connection to the output PDF file
-pdf("output.pdf")
+# Define the table header
+header <- c("Key", "Value")
 
-# Print the contents of the data frame to the PDF file
-for (i in seq_len(nrow(df))) {
-  for (j in seq_len(ncol(df))) {
-    cat(paste(names(df)[j], ": ", df[i, j], "\n"))
+# Add the table header to the PDF
+pdf <- AddPage()
+pdf <- SetFont("Arial", "B", 16)
+for (i in 1:length(header)) {
+  pdf <- Cell(50, 10, header[i], 1)
+}
+pdf <- Ln()
+
+# Add the data to the PDF
+pdf <- SetFont("Arial", "", 12)
+for (i in 1:length(data)) {
+  for (j in 1:length(header)) {
+    pdf <- Cell(50, 10, names(data)[i], 1)
+    pdf <- Cell(50, 10, data[[i]], 1)
   }
-  cat("\n")
+  pdf <- Ln()
 }
 
-# Close the connection to the PDF file
-dev.off()
+# Save the PDF file
+pdf <- Output("output.pdf", "F")
