@@ -1,23 +1,24 @@
-library(ReporteRs)
+# Load necessary packages
 library(jsonlite)
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
 
-# Load the JSON object from a file
-data <- fromJSON("data.json")
+# Read in the JSON file
+json_data <- fromJSON("path/to/your/file.json")
 
-# Create a new document object
-doc <- docx()
+# Flatten the JSON data into a data frame
+flat_data <- as.data.frame(json_data, recursive = TRUE) %>%
+  gather(key, value) %>%
+  unnest(value) %>%
+  select(-key)
 
-# Add a header to the document
-doc <- addParagraph(doc, "My JSON Data", style = "Title")
+# Convert the data frame to a knitr kable object
+kable_data <- kable(flat_data, "latex", booktabs = TRUE)
 
-# Add a table to the document
-header <- c("Key", "Value")
-data_rows <- lapply(names(data), function(nm) {
-  row <- as.data.frame(t(c(nm, data[[nm]])))
-  colnames(row) <- header
-  return(row)
-})
-doc <- addFlexTable(doc, value = data_rows, header.columns = header)
-
-# Save the document
-writeDoc(doc, file = "output.docx")
+# Write the kable object to a PDF file
+knitr::kable_styling(kable_data, full_width = FALSE) %>%
+  as.character() %>%
+  cat(file = "path/to/output/file.pdf", sep = "\n")
