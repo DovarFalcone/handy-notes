@@ -39,16 +39,15 @@ if (nrow(flat_data) == 0) {
 
 # Convert the data frame to a knitr kable object
 kable_data <- tryCatch({
-  kable(flat_data, "latex", booktabs = TRUE)
+  kable(flat_data, "latex", booktabs = TRUE) %>%
+    kable_styling(latex_options = c("striped", "HOLD_position"))
 }, error = function(e) {
   stop("Failed to convert data to kable format: ", e$message)
 })
 
 # Write the kable object to a PDF file
 tryCatch({
-  knitr::kable_styling(kable_data, full_width = FALSE) %>%
-    as.character() %>%
-    cat(file = output_path, sep = "\n")
+  cat(kable_data, file = output_path)
 }, error = function(e) {
   stop("Failed to write PDF file: ", e$message)
 })
