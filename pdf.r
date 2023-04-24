@@ -3,8 +3,13 @@ library(jsonlite)
 # Load the JSON object from a file
 data <- fromJSON("data.json")
 
-# Convert the list to a data frame
-df <- as.data.frame(data)
+# Convert the list to a data frame with row names
+df <- as.data.frame(data, row.names = paste0("row", seq_along(data)))
+
+# Check for duplicate row names and add prefix if necessary
+if (any(duplicated(row.names(df)))) {
+  row.names(df) <- paste0("row", seq_along(data))
+}
 
 # Open a connection to the output PDF file
 pdf("output.pdf")
