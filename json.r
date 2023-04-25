@@ -1,27 +1,24 @@
-library(tidyverse)
+# Load required libraries
 library(jsonlite)
 
-data <- read_csv("your_csv_file.csv")
+# Set file paths
+csv_file <- "path/to/csv/file.csv"
+output_dir <- "path/to/output/directory"
 
-for (i in 1:nrow(data)) {
-  # Extract the necessary information
-  facility_name <- data[i, "facility_name"]
-  clean_name <- data[i, "clean_name"]
-  time <- data[i, "time"]
-  json_str <- data[i, "json_data"]
+# Read in the CSV file
+df <- read.csv(csv_file)
+
+# Loop through each row in the data frame and create a JSON file
+for (i in 1:nrow(df)) {
+  # Extract the data for the current row
+  row_data <- df[i, ]
   
-  # Skip over rows with invalid JSON data
-  if (!jsonlite::validate(json_str)) {
-    warning(paste0("Skipping row ", i, " due to invalid JSON data."))
-    next
-  }
+  # Convert the row data to a JSON object
+  json_data <- toJSON(row_data, pretty = TRUE)
   
-  # Parse the JSON data into a JSON object
-  json_data <- jsonlite::fromJSON(json_str)
+  # Set the output file name
+  output_file <- paste0(output_dir, "/row_", i, ".json")
   
-  # Create a filename
-  filename <- paste0(facility_name, "_", clean_name, "_", time, ".json")
-  
-  # Write the JSON file
-  jsonlite::write_json(json_data, filename)
+  # Write the JSON object to a file
+  write(json_data, file = output_file)
 }
