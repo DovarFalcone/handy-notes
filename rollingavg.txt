@@ -1,0 +1,11 @@
+Rolling Average = 
+VAR DateColumn = 'Table'[Date]  // Replace 'Table' with the actual name of your table
+RETURN
+    AVERAGEX(
+        FILTER(
+            ALL('Table'),
+            'Table'[Date] <= MAX(DateColumn) &&
+            'Table'[Date] >= MAX(DateColumn) - 6  // Change '6' to 'n-1' if you want an n-day rolling average
+        ),
+        'Table'[Value]
+    )
