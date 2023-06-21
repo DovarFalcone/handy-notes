@@ -1,3 +1,30 @@
+---
+FROM mcr.microsoft.com/devcontainers/python:0-3.11
+
+COPY ca_bundle.crt /usr/local/share/ca-certificates
+RUN update-ca-certificates
+
+COPY requirements.txt /tmp/pip-tmp/
+RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4200\
+  --disable-pip-version-check \
+  --trusted-host pypi.python.org \
+  --cert /usr/local/share/ca-certificates/ca_bundle.crt \
+  --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+  || { echo 'pip3 command failed, retrying without proxy' ; \
+       pip3 --disable-pip-version-check \
+       --trusted-host pypi.python.org \
+       --cert /usr/local/share/ca-certificates/ca_bundle.crt \
+       --no-cache-dir install -r /tmp/pip-tmp/requirements.txt ; } \
+  && rm -rf /tmp/pip-tmp
+
+WORKDIR /app
+COPY app/ ./
+
+EXPOSE 8000
+ENTRYPOINT [ "uvicorn", "--reload", "--host", "0.0.0.0", "fastapi_server:app" ]
+
+---
+
 FROM mcr.microsoft.com/devcontainers/python:0-3.11
 
 
