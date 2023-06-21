@@ -2,13 +2,14 @@
 FROM mcr.microsoft.com/devcontainers/python:0-3.11
 
 COPY ca_bundle.crt /usr/local/share/ca-certificates
+COPY ca_bundle.pem /usr/local/share/ca-certificates
 RUN update-ca-certificates
 
 COPY requirements.txt /tmp/pip-tmp/
-RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4200\
+RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4300 \
   --disable-pip-version-check \
   --trusted-host pypi.python.org \
-  --cert /usr/local/share/ca-certificates/ca_bundle.crt \
+  --cert /usr/local/share/ca-certificates/ca_bundle.pem \
   --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
   || { echo 'pip3 command failed, retrying without proxy' ; \
        pip3 --disable-pip-version-check \
@@ -22,6 +23,53 @@ COPY app/ ./
 
 EXPOSE 8000
 ENTRYPOINT [ "uvicorn", "--reload", "--host", "0.0.0.0", "fastapi_server:app" ]
+
+
+```
+ => ERROR [6/8] RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4300   --disable-pip-version-check   --trusted-host pypi.python.org   --cert /usr/local/share/ca-certificates/ca_bundle.pem   --no-cache-di  35.6s 
+------
+ > [6/8] RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4300   --disable-pip-version-check   --trusted-host pypi.python.org   --cert /usr/local/share/ca-certificates/ca_bundle.pem   --no-cache-dir install -r /tmp/pip-tmp/requirements.txt   || { echo 'pip3 command failed, retrying without proxy' ;        pip3 --disable-pip-version-check        --trusted-host pypi.python.org        --cert /usr/local/share/ca-certificates/ca_bundle.crt        --no-cache-dir install -r /tmp/pip-tmp/requirements.txt ; }   && rm -rf /tmp/pip-tmp:
+#0 9.885 Collecting llama-cpp-python (from -r /tmp/pip-tmp/requirements.txt (line 1))
+#0 15.95   Downloading llama_cpp_python-0.1.65.tar.gz (1.5 MB)
+#0 18.81      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 5.3 MB/s eta 0:00:00
+#0 18.93   Installing build dependencies: started
+#0 27.29   Installing build dependencies: finished with status 'error'
+#0 27.29   error: subprocess-exited-with-error
+#0 27.29
+#0 27.29   × pip subprocess to install build dependencies did not run successfully.
+#0 27.29   │ exit code: 1
+#0 27.29   ╰─> [7 lines of output]
+#0 27.29       WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fdb4d4fd410>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
+#0 27.29       WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fdb4d4fd450>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
+#0 27.29       WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fdb4cfa9a50>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
+#0 27.29       WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fdb4cfaa4d0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
+#0 27.29       WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fdb4cfab090>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
+#0 27.29       ERROR: Could not find a version that satisfies the requirement setuptools>=42 (from versions: none)
+#0 27.29       ERROR: No matching distribution found for setuptools>=42
+#0 27.29       [end of output]
+#0 27.29
+#0 27.29   note: This error originates from a subprocess, and is likely not a problem with pip.
+#0 27.30 error: subprocess-exited-with-error
+#0 27.30
+#0 27.30 × pip subprocess to install build dependencies did not run successfully.
+#0 27.30 │ exit code: 1
+#0 27.30 ╰─> See above for output.
+#0 27.30
+#0 27.30 note: This error originates from a subprocess, and is likely not a problem with pip.
+#0 27.39 pip3 command failed, retrying without proxy
+#0 27.83 WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fd06dcba6d0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/llama-cpp-python/
+#0 28.33 WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fd06f3d77d0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/llama-cpp-python/
+#0 29.34 WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fd06dcbba90>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/llama-cpp-python/
+#0 31.34 WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fd06dcc4450>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/llama-cpp-python/
+#0 35.35 WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fd06dcc4e90>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/llama-cpp-python/
+#0 35.53 ERROR: Could not find a version that satisfies the requirement llama-cpp-python (from versions: none)
+#0 35.53 ERROR: No matching distribution found for llama-cpp-python
+------
+failed to solve: executor failed running [/bin/sh -c pip3 --proxy=http://web.prod.proxy.cargill.com:4300   --disable-pip-version-check   --trusted-host pypi.python.org   --cert /usr/local/share/ca-certificates/ca_bundle.pem   --no-cache-dir install -r /tmp/pip-tmp/requirements.txt   || { echo 'pip3 command failed, retrying without proxy' ;        pip3 --disable-pip-version-check        --trusted-host pypi.python.org        --cert /usr/local/share/ca-certificates/ca_bundle.crt        --no-cache-dir install -r /tmp/pip-tmp/requirements.txt ; }   && rm -rf /tmp/pip-tmp]: exit code: 1
+
+ *  The terminal process "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -Command docker compose -f "docker-compose.yml" up -d --build" terminated with exit code: 1. 
+ *  Terminal will be reused by tasks, press any key to close it. 
+
 
 ---
 
@@ -44,40 +92,4 @@ COPY app/ ./
 
 EXPOSE 8000
 ENTRYPOINT [ "uvicorn", "--reload", "--host", "0.0.0.0", "fastapi_server:app" ]
-
-```
- => ERROR [5/7] RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4200  --disable-pip-version-check   --trusted-host pypi.python.org   --cert /usr/local/share/ca-certificates/ca_bundle.crt   --no-cache-dir  25.9s 
-------
- > [5/7] RUN pip3 --proxy=http://web.prod.proxy.cargill.com:4200  --disable-pip-version-check   --trusted-host pypi.python.org   --cert /usr/local/share/ca-certificates/ca_bundle.crt   --no-cache-dir install -r /tmp/pip-tmp/requirements.txt   && rm -rf /tmp/pip-tmp:
-#0 10.78 WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProxyError('Cannot connect to proxy.', NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f640476d090>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))': /simple/llama-cpp-python/
-#0 11.33 Collecting llama-cpp-python (from -r /tmp/pip-tmp/requirements.txt (line 1))
-#0 16.84   Downloading llama_cpp_python-0.1.65.tar.gz (1.5 MB)
-#0 17.24      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 5.1 MB/s eta 0:00:00
-#0 17.37   Installing build dependencies: started
-#0 25.80   Installing build dependencies: finished with status 'error'
-#0 25.81   error: subprocess-exited-with-error
-#0 25.81
-#0 25.81   × pip subprocess to install build dependencies did not run successfully.
-#0 25.81   │ exit code: 1
-#0 25.81   ╰─> [7 lines of output]
-#0 25.81       WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fc4d0b57f90>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
-#0 25.81       WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fc4d1345190>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
-#0 25.81       WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fc4d0b69490>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
-#0 25.81       WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fc4d0b69f50>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
-#0 25.81       WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7fc4d0b6ab10>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/setuptools/
-#0 25.81       ERROR: Could not find a version that satisfies the requirement setuptools>=42 (from versions: none)
-#0 25.81       ERROR: No matching distribution found for setuptools>=42
-#0 25.81       [end of output]
-#0 25.81
-#0 25.81   note: This error originates from a subprocess, and is likely not a problem with pip.
-#0 25.81 error: subprocess-exited-with-error
-#0 25.81
-#0 25.81 × pip subprocess to install build dependencies did not run successfully.
-#0 25.81 │ exit code: 1
-#0 25.81 ╰─> See above for output.
-#0 25.81
-#0 25.81 note: This error originates from a subprocess, and is likely not a problem with pip.
-------
-failed to solve: executor failed running [/bin/sh -c pip3 --proxy=http://web.prod.proxy.cargill.com:4200  --disable-pip-version-check   --trusted-host pypi.python.org   --cert /usr/local/share/ca-certificates/ca_bundle.crt   --no-cache-dir install -r /tmp/pip-tmp/requirements.txt   && rm -rf /tmp/pip-tmp]: exit code: 1
-
- *  The terminal process "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -Command docker compose -f "docker-compose.yml" up -d --build" terminated with exit code: 1. 
+---
