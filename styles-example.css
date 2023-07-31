@@ -1,0 +1,22 @@
+/* styles.css */
+
+/* Add your custom CSS styles here */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.container {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.slider-label {
+  font-weight: bold;
+}
+
+.slider-input {
+  width: 100%;
+}
