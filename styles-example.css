@@ -1,22 +1,91 @@
-/* styles.css */
+/* Reset some default styles */
+body, h1, h3, p {
+  margin: 0;
+  padding: 0;
+  color: #f2f2f2;
+}
 
-/* Add your custom CSS styles here */
+/* Basic layout styles */
 body {
+  background-color: #111;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
 }
 
-.container {
+header {
+  background-color: #222;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
+  display: flex;
+  align-items: center;
 }
 
-.slider-label {
-  font-weight: bold;
+nav {
+  background-color: #333;
+  padding: 10px;
 }
 
-.slider-input {
-  width: 100%;
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav ul li {
+  margin-right: 10px;
+}
+
+nav ul li a {
+  color: #f2f2f2;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+nav ul li a:hover {
+  background-color: #444;
+}
+
+main {
+  padding: 20px;
+}
+
+/* Logo style */
+.logo {
+  float: right;
+  width: 100px; /* Adjust the width to fit your logo size */
+}
+
+/* Header styles */
+h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+/* Paragraph style */
+p {
+  line-height: 1.6;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: #111;
+}
+
+header.dark-mode {
+  background-color: #222;
+}
+
+nav.dark-mode {
+  background-color: #333;
+}
+
+nav.dark-mode ul li a {
+  color: #f2f2f2;
+}
+
+main.dark-mode {
+  background-color: #111;
 }
