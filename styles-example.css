@@ -2,36 +2,46 @@
 body, h1, h3, p {
   margin: 0;
   padding: 0;
-  color: #f2f2f2;
 }
 
 /* Basic layout styles */
 body {
-  background-color: #111;
+  background-color: #f2f2f2;
   font-family: Arial, sans-serif;
 }
 
 header {
-  background-color: #222;
+  background-color: #222222;
   padding: 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 /* Logo style */
 .logo {
-  flex: 1;
-  text-align: right;
+  flex: 0;
 }
 
 .logo img {
   width: 100px; /* Adjust the width to fit your logo size */
 }
 
-h1 {
+.title {
   flex: 2;
+  color: #f2f2f2;
+  text-align: center;
+  margin: 0 auto; /* Center the title */
+}
+
+h1 {
   font-size: 36px;
-  margin: 0;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
 /* Other header styles */
@@ -52,11 +62,11 @@ body.dark-mode {
 }
 
 header.dark-mode {
-  background-color: #222;
+  background-color: #0e1224;
 }
 
 nav.dark-mode {
-  background-color: #333;
+  background-color: #444;
 }
 
 nav.dark-mode ul li a {
@@ -75,16 +85,54 @@ body.light-mode {
 
 header.light-mode {
   background-color: #f2f2f2;
+  color: #222; /* Text color in light mode */
 }
 
 nav.light-mode {
-  background-color: #444;
+  background-color: #333;
+}
+
+nav.light-mode ul {
+  display: flex;
+  justify-content: center;
+}
+
+nav.light-mode ul li {
+  margin-right: 10px;
 }
 
 nav.light-mode ul li a {
-  color: #111;
+  color: #f2f2f2;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+nav.light-mode ul li a:hover {
+  background-color: #444;
 }
 
 main.light-mode {
   background-color: #f2f2f2;
+}
+
+/* Navigation styles */
+.navigation {
+  background-color: #333;
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  padding: 10px;
+}
+
+.navigation button {
+  color: #f2f2f2;
+  text-decoration: none;
+  padding: 5px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.navigation button:hover {
+  background-color: #444;
 }
