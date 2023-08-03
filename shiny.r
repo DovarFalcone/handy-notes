@@ -3,23 +3,20 @@ library(shinydashboard)
 
 # Read the content of the custom_page.html file
 custom_html <- readLines("custom_page.html", warn = FALSE)
+custom_html <- paste(custom_html, collapse = "\n")
 
 # UI part of the Shiny app
 ui <- dashboardPage(
   dashboardHeader(title = "Custom Page in ShinyDashboard"),
   dashboardSidebar(),
   dashboardBody(
-    # Use renderUI and uiOutput to display the custom HTML content
-    shiny::uiOutput("custom_html")
+    # Use HTML to display the custom HTML content
+    HTML(custom_html)
   )
 )
 
-# Server part of the Shiny app
+# Server part of the Shiny app (you can leave this part empty if you don't have any reactive elements)
 server <- function(input, output) {
-  # Render the custom HTML content
-  output$custom_html <- shiny::renderUI({
-    HTML(paste(custom_html, collapse = "\n"))
-  })
 }
 
 # Run the Shiny app
