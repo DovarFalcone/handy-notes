@@ -1,6 +1,6 @@
 library(shiny)
 library(shinydashboard)
-library(markdown)
+library(rmarkdown)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Shiny Dashboard with R Markdown Tab"),
@@ -14,7 +14,7 @@ ui <- dashboardPage(
         h2("This is the dashboard content")
       ),
       tabItem(tabName = "rmarkdown_tab",
-        # Use uiOutput to render the .html content from the .Rmd file
+        # Use uiOutput to render the R Markdown content
         uiOutput("rmarkdown_output")
       )
     )
@@ -22,13 +22,13 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output) {
-  # Render the .html content from the .Rmd file as UI output
+  # Render the R Markdown content as Shiny UI elements
   output$rmarkdown_output <- renderUI({
-    # Read the .html content from the .Rmd file
-    rmarkdown_content <- readLines("report.html", warn = FALSE)
+    # Read the R Markdown file
+    rmarkdown_content <- rmarkdown::render("report.Rmd")
 
-    # Convert the .html content to HTML
-    HTML(paste(rmarkdown_content, collapse = "\n"))
+    # Return the HTML content of the rendered R Markdown
+    HTML(rmarkdown_content)
   })
 }
 
