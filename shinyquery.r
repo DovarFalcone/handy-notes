@@ -1,6 +1,6 @@
 # Load required libraries
 library(dplyr)
-library(dbplyr)
+library(DBI)
 
 # Database connection parameters (common for all servers)
 db_params <- list(
@@ -16,8 +16,8 @@ perform_query <- function(server_name) {
   conn_params <- db_params
   conn_params$host <- server_name
 
-  con <- dbConnect(
-    RPostgreSQL::PostgreSQL(),
+  con <- DBI::dbConnect(
+    drv = RPostgreSQL::PostgreSQL(),
     dbname = conn_params$dbname,
     host = conn_params$host,
     port = conn_params$port,
@@ -28,12 +28,13 @@ perform_query <- function(server_name) {
   query <- "SELECT * FROM your_table;"  # Replace with your actual query
 
   print(paste("Executing query for server", server_name, "..."))
-  data <- tbl(con, sql(query))
+  data <- dplyr::tbl(con, sql(query))
 
-  dbDisconnect(con)
+  DBI::dbDisconnect(con)
   print(paste("Query executed successfully for server", server_name, "."))
   return(data)
 }
+
 
 
 
