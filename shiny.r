@@ -1,17 +1,13 @@
 library(shiny)
 library(shinydashboard)
 
-# Read the content of the custom_page.html file
-custom_html <- readLines("custom_page.html", warn = FALSE)
-custom_html <- paste(custom_html, collapse = "\n")
-
 # UI part of the Shiny app
 ui <- dashboardPage(
-  dashboardHeader(title = "Custom Page in ShinyDashboard"),
+  dashboardHeader(title = "Embedded URL in ShinyDashboard"),
   dashboardSidebar(),
   dashboardBody(
-    # Use HTML to display the custom HTML content
-    HTML(custom_html)
+    # Use iframe to embed a URL
+    tags$iframe(src = "https://example.com", width = "100%", height = "800px")
   )
 )
 
