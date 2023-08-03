@@ -1,6 +1,6 @@
 ## global.r
 # Load required libraries
-library(RPostgreSQL)
+library(odbc)
 
 # Database connection parameters (common for all servers)
 db_params <- list(
@@ -16,8 +16,13 @@ perform_query <- function(server_name) {
   conn_params <- db_params
   conn_params$host <- server_name
   
-  conn <- dbConnect(PostgreSQL(), dbname = conn_params$dbname, host = conn_params$host,
-                    port = conn_params$port, user = conn_params$user, password = conn_params$password)
+  conn <- dbConnect(odbc::odbc(), .connection_string = paste0(
+    "Driver={PostgreSQL Unicode};Server=", conn_params$host,
+    ";Port=", conn_params$port,
+    ";Database=", conn_params$dbname,
+    ";Uid=", conn_params$user,
+    ";Pwd=", conn_params$password
+  ))
 
   query <- "SELECT * FROM your_table;"  # Replace with your actual query
 
@@ -28,6 +33,7 @@ perform_query <- function(server_name) {
   print(paste("Query executed successfully for server", server_name, "."))
   return(data)
 }
+
 
 
 ## ui.r
@@ -60,6 +66,7 @@ ui <- dashboardPage(
   )
 )
 
+
 ## server.r
 # Load required libraries
 library(shiny)
@@ -89,4 +96,5 @@ server <- function(input, output) {
     })
   })
 }
+
 
