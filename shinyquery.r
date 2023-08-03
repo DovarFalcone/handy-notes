@@ -28,7 +28,7 @@ perform_query <- function(server_name) {
   query <- "SELECT * FROM your_table;"  # Replace with your actual query
 
   print(paste("Executing query for server", server_name, "..."))
-  data <- dplyr::tbl(con, sql(query))
+  data <- dbGetQuery(con, query)
 
   DBI::dbDisconnect(con)
   print(paste("Query executed successfully for server", server_name, "."))
