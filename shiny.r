@@ -36,7 +36,6 @@ shinyApp(ui, server)
 
 library(shiny)
 library(shinydashboard)
-library(htmltools)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Shiny Dashboard with R Markdown Tab"),
@@ -50,8 +49,8 @@ ui <- dashboardPage(
         h2("This is the dashboard content")
       ),
       tabItem(tabName = "rmarkdown_tab",
-        # Use htmltools::tags$iframe to embed the R Markdown content
-        htmltools::tags$iframe(src = "report.html", width = "100%", height = "100%")
+        # Use includeMarkdown to render the R Markdown file
+        includeMarkdown("report.Rmd")
       )
     )
   )
