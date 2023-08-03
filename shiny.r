@@ -1,17 +1,15 @@
-# Load required libraries
 library(shiny)
 library(shinydashboard)
-
-# Get the absolute path to the custom_page.html file
-custom_page_path <- file.path(Sys.getenv("HOME"), "path_to_custom_page_folder", "custom_page.html")
 
 # UI part of the Shiny app
 ui <- dashboardPage(
   dashboardHeader(title = "Custom Page in ShinyDashboard"),
   dashboardSidebar(),
   dashboardBody(
-    # Use iframe to display the custom HTML content
-    tags$iframe(src = custom_page_path, width = "100%", height = "100%")
+    # Use tags$div and includeHTML to display the custom HTML content
+    tags$div(
+      htmltools::includeHTML("custom_page.html")
+    )
   )
 )
 
