@@ -7,7 +7,8 @@ from dash import dcc, html
 port = int(os.environ.get("CDSW_APP_PORT", 8080))
 
 # Import the Dash app from your app.py file
-from app import app, perform_query  # Import the perform_query function
+from app import app
+from app import perform_query  # Correctly import the perform_query function
 
 # Add your layout components and callbacks here if needed
 # For example, you can add more components to the layout:
