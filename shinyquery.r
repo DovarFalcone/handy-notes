@@ -16,13 +16,14 @@ perform_query <- function(server_name) {
   conn_params <- db_params
   conn_params$host <- server_name
   
-  conn <- dbConnect(odbc::odbc(), .connection_string = paste0(
-    "Driver={PostgreSQL Unicode};Server=", conn_params$host,
-    ";Port=", conn_params$port,
-    ";Database=", conn_params$dbname,
-    ";Uid=", conn_params$user,
-    ";Pwd=", conn_params$password
-  ))
+conn <- dbConnect(odbc::odbc(),
+                  Driver = "PostgreSQL Unicode", 
+                  Server = conn_params$host,
+                  Port = conn_params$port,
+                  Database = conn_params$dbname,
+                  UID = conn_params$user,
+                  PWD = conn_params$password)
+
 
   query <- "SELECT * FROM your_table;"  # Replace with your actual query
 
