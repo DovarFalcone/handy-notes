@@ -1,6 +1,6 @@
-## global.r
 # Load required libraries
-library(odbc)
+library(dplyr)
+library(dbplyr)
 
 # Database connection parameters (common for all servers)
 db_params <- list(
@@ -15,22 +15,22 @@ db_params <- list(
 perform_query <- function(server_name) {
   conn_params <- db_params
   conn_params$host <- server_name
-  
-conn <- dbConnect(odbc::odbc(),
-                  Driver = "PostgreSQL Unicode", 
-                  Server = conn_params$host,
-                  Port = conn_params$port,
-                  Database = conn_params$dbname,
-                  UID = conn_params$user,
-                  PWD = conn_params$password)
 
+  con <- dbConnect(
+    RPostgreSQL::PostgreSQL(),
+    dbname = conn_params$dbname,
+    host = conn_params$host,
+    port = conn_params$port,
+    user = conn_params$user,
+    password = conn_params$password
+  )
 
   query <- "SELECT * FROM your_table;"  # Replace with your actual query
 
   print(paste("Executing query for server", server_name, "..."))
-  data <- dbGetQuery(conn, query)
+  data <- tbl(con, sql(query))
 
-  dbDisconnect(conn)
+  dbDisconnect(con)
   print(paste("Query executed successfully for server", server_name, "."))
   return(data)
 }
