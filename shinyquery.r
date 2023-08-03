@@ -17,7 +17,7 @@ perform_query <- function(server_name) {
   conn_params$host <- server_name
 
   con <- DBI::dbConnect(
-    drv = RPostgreSQL::PostgreSQL(),
+    drv = dbDriver("PostgreSQL"),
     dbname = conn_params$dbname,
     host = conn_params$host,
     port = conn_params$port,
@@ -34,9 +34,6 @@ perform_query <- function(server_name) {
   print(paste("Query executed successfully for server", server_name, "."))
   return(data)
 }
-
-
-
 
 ## ui.r
 library(shiny)
