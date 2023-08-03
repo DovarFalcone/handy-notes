@@ -8,6 +8,10 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import psycopg2
 
+# Retrieve database username and password from environment variables
+db_username = os.environ.get("DB_USERNAME", "default_username")
+db_password = os.environ.get("DB_PASSWORD", "default_password")
+
 # Database connection parameters (common for all servers)
 db_params = {
     "dbname": "your_db_name",
