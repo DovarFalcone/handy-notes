@@ -6,7 +6,11 @@ install_if_not_installed <- function(package_list) {
   missing_pkgs <- setdiff(package_list, installed_pkgs)
   
   if (length(missing_pkgs) > 0) {
+    print(paste("Installing the following packages:", paste(missing_pkgs, collapse = ", ")))
     install.packages(missing_pkgs)
+    print(paste("Installed packages:", paste(missing_pkgs, collapse = ", ")))
+  } else {
+    print("All packages are already installed.")
   }
 }
 
