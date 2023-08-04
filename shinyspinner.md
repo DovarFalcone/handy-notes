@@ -1,4 +1,4 @@
-Apologies for the confusion. I made a mistake in the previous response. The `spinnerOutput` function does not exist in Shiny. To display a loading spinner while the query is running, you can use the `shinyjs` package along with custom CSS to achieve the desired effect. Here's how you can do it:
+To display a loading spinner while the query is running, you can use the `shinyjs` package along with custom CSS to achieve the desired effect. Here's how you can do it:
 
 1. Install the Required Packages:
 
@@ -34,6 +34,33 @@ Apologies for the confusion. I made a mistake in the previous response. The `spi
       }'
    )
    ```
+
+You should put the `shinyjs::jsCode` calls in the `ui` file of your Shiny app. The `shinyjs::jsCode` function is used to include custom JavaScript code, which is typically placed in the `ui` section.
+
+Here's how you should structure your `ui` file:
+
+```r
+# ui.R
+library(shiny)
+library(shinyjs)
+
+shinyUI(fluidPage(
+  useShinyjs(),  # Initialize shinyjs
+
+  # Add the spinner (replace with your desired HTML/CSS for the spinner)
+  tags$div(class = "spinner", "Loading..."),
+
+  # ... other UI components ...
+
+  actionButton("query_button", "Send Query")
+))
+```
+
+The `shinyjs::jsCode` calls are included directly in the `ui` section, alongside other UI components. In this example, the spinner is placed inside the `tags$div(class = "spinner", "Loading...")` div. You can replace the "Loading..." text with your desired HTML/CSS for the spinner.
+
+The JavaScript code inside `shinyjs::jsCode` is used to define the custom functions `showSpinner` and `hideSpinner`. These functions will be accessible from the `server` section of your Shiny app, where you can use them to show and hide the spinner based on events, such as when the "Send Query" button is clicked.
+
+In summary, the `shinyjs::jsCode` calls to define the spinner-related JavaScript functions should be placed in the `ui` file of your Shiny app, while their usage (i.e., calling `shinyjs::js$showSpinner()` and `shinyjs::js$hideSpinner()`) should be placed in the `server` file in response to the relevant events.
 
 4. Define the UI:
 
