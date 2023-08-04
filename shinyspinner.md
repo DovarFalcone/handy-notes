@@ -1,77 +1,30 @@
-To display a loading spinner while the query is running, you can use the `shinyjs` package along with custom CSS to achieve the desired effect. Here's how you can do it:
+If you prefer a simpler method to let the user know that the query is loading and to wait, you can use the `shiny::showModal` function to display a basic "Please wait" modal dialog.
 
-1. Install the Required Packages:
+Here's how you can do it:
 
-   Make sure you have the `shinyjs` package installed. You can install it from CRAN using the `install.packages` function:
+1. Load the Required Libraries:
 
-   ```r
-   install.packages("shinyjs")
-   ```
-
-2. Load the Required Libraries:
-
-   In your Shiny app script, load the required libraries:
+   In your Shiny app script, load the required library:
 
    ```r
    library(shiny)
-   library(shinyjs)
    ```
 
-3. Use `shinyjs` to Show and Hide Spinner:
+2. Define the UI:
 
-   Add the following JavaScript code to your Shiny app to show and hide the spinner:
-
-   ```r
-   shinyjs::jsCode(
-     'shinyjs.showSpinner = function() {
-        $(".spinner").show();
-      }'
-   )
-
-   shinyjs::jsCode(
-     'shinyjs.hideSpinner = function() {
-        $(".spinner").hide();
-      }'
-   )
-   ```
-
-You should put the `shinyjs::jsCode` calls in the `ui` file of your Shiny app. The `shinyjs::jsCode` function is used to include custom JavaScript code, which is typically placed in the `ui` section.
-
-Here's how you should structure your `ui` file:
-
-```r
-# ui.R
-library(shiny)
-library(shinyjs)
-
-shinyUI(fluidPage(
-  useShinyjs(),  # Initialize shinyjs
-
-  # Add the spinner (replace with your desired HTML/CSS for the spinner)
-  tags$div(class = "spinner", "Loading..."),
-
-  # ... other UI components ...
-
-  actionButton("query_button", "Send Query")
-))
-```
-
-The `shinyjs::jsCode` calls are included directly in the `ui` section, alongside other UI components. In this example, the spinner is placed inside the `tags$div(class = "spinner", "Loading...")` div. You can replace the "Loading..." text with your desired HTML/CSS for the spinner.
-
-The JavaScript code inside `shinyjs::jsCode` is used to define the custom functions `showSpinner` and `hideSpinner`. These functions will be accessible from the `server` section of your Shiny app, where you can use them to show and hide the spinner based on events, such as when the "Send Query" button is clicked.
-
-In summary, the `shinyjs::jsCode` calls to define the spinner-related JavaScript functions should be placed in the `ui` file of your Shiny app, while their usage (i.e., calling `shinyjs::js$showSpinner()` and `shinyjs::js$hideSpinner()`) should be placed in the `server` file in response to the relevant events.
-
-4. Define the UI:
-
-   In the `ui` function of your Shiny app, define the spinner along with your other UI components:
+   In the `ui` function of your Shiny app, add a "Please wait" modal dialog:
 
    ```r
    ui <- fluidPage(
-     useShinyjs(),  # Initialize shinyjs
+     # ... other UI components ...
 
-     # Add the spinner (replace with your desired HTML/CSS for the spinner)
-     tags$div(class = "spinner", "Loading..."),
+     # Modal dialog for "Please wait"
+     modalDialog(
+       id = "modal_loading",
+       title = "Please Wait",
+       "Loading...",
+       footer = NULL
+     ),
 
      # ... other UI components ...
 
@@ -79,26 +32,28 @@ In summary, the `shinyjs::jsCode` calls to define the spinner-related JavaScript
    )
    ```
 
-   Replace `tags$div(class = "spinner", "Loading...")` with your desired HTML/CSS for the spinner. You can style the spinner using custom CSS.
+   The `modalDialog` function will create a basic modal dialog with the title "Please Wait" and the text "Loading...". You can customize this dialog further if needed.
 
-5. Use `shinyjs` in the `server` Function:
+3. Use `shinyjs` in the `server` Function:
 
-   In the `server` function, use `shinyjs` to show and hide the spinner as needed:
+   In the `server` function, use the `shinyjs::showModal` and `shinyjs::hideModal` functions to show and hide the "Please wait" modal dialog as needed:
 
    ```r
    server <- function(input, output, session) {
      observeEvent(input$query_button, {
-       shinyjs::js$showSpinner()  # Show the spinner before executing the query
+       shinyjs::showModal("modal_loading")  # Show the modal before executing the query
 
        # Execute your query or time-consuming operation here
        # Replace this with your actual query execution code
        Sys.sleep(3)  # Simulate a delay of 3 seconds
 
-       shinyjs::js$hideSpinner()  # Hide the spinner after query execution
+       shinyjs::hideModal("modal_loading")  # Hide the modal after query execution
      })
    }
    ```
 
    Replace `Sys.sleep(3)` with your actual query execution code.
 
-With these changes, when you click the "Send Query" button, the spinner will be displayed while the query is running. Once the query execution is complete, the spinner will disappear, and the results or any other outputs will be displayed in the UI. Remember to customize the spinner's appearance using CSS to match your app's style.
+With these changes, when you click the "Send Query" button, the "Please wait" modal dialog will be displayed, indicating that the query is loading. Once the query execution is complete, the modal dialog will automatically disappear, and the results or any other outputs will be displayed in the UI.
+
+Using the `shiny::showModal` and `shiny::hideModal` functions provides a simple way to show a loading message to users without the need for custom CSS or JavaScript. The modal dialog provides a clean and straightforward method to inform users that the query is running and to wait for the results.
