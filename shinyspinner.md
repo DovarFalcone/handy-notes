@@ -1,13 +1,11 @@
-To show a spinning icon (loading spinner) while the queries are running in your Shiny dashboard, you can use the `shinycssloaders` package, which provides a variety of loading spinner options.
+Apologies for the confusion. I made a mistake in the previous response. The `spinnerOutput` function does not exist in Shiny. To display a loading spinner while the query is running, you can use the `shinyjs` package along with custom CSS to achieve the desired effect. Here's how you can do it:
 
-Here's how you can do it:
+1. Install the Required Packages:
 
-1. Install the Required Package:
-
-   First, make sure you have the `shinycssloaders` package installed. You can install it from CRAN using the `install.packages` function:
+   Make sure you have the `shinyjs` package installed. You can install it from CRAN using the `install.packages` function:
 
    ```r
-   install.packages("shinycssloaders")
+   install.packages("shinyjs")
    ```
 
 2. Load the Required Libraries:
@@ -16,62 +14,64 @@ Here's how you can do it:
 
    ```r
    library(shiny)
-   library(shinycssloaders)
+   library(shinyjs)
    ```
 
-3. Use the `withSpinner` Function:
+3. Use `shinyjs` to Show and Hide Spinner:
 
-   Wrap the part of your app where you want the loading spinner to be displayed using the `withSpinner` function. Typically, you want to wrap the query execution code in the `server` function.
-
-   ```r
-   server <- function(input, output, session) {
-     # ... other server code ...
-
-     observeEvent(input$query_button, {
-       # Show the loading spinner while the query is running
-       withSpinner({
-         # Execute your query or time-consuming operation here
-         # Replace this with your actual query execution code
-         Sys.sleep(3)  # Simulate a delay of 3 seconds
-       })
-     })
-
-     # ... other server code ...
-   }
-   ```
-
-   In this example, the `withSpinner` function will display the loading spinner while the query is executing. Replace `Sys.sleep(3)` with your actual query execution code.
-
-4. Add the Spinner to the UI:
-
-   In the `ui` function of your Shiny app, add the `spinnerOutput` function to display the spinner in the UI:
+   Add the following JavaScript code to your Shiny app to show and hide the spinner:
 
    ```r
-   ui <- fluidPage(
-     # ... other UI components ...
+   shinyjs::jsCode(
+     'shinyjs.showSpinner = function() {
+        $(".spinner").show();
+      }'
+   )
 
-     # Add the spinner to the UI
-     spinnerOutput("query_spinner"),
-
-     # ... other UI components ...
+   shinyjs::jsCode(
+     'shinyjs.hideSpinner = function() {
+        $(".spinner").hide();
+      }'
    )
    ```
 
-5. Define Spinner Output:
+4. Define the UI:
 
-   In the `server` function, define the output for the spinner:
+   In the `ui` function of your Shiny app, define the spinner along with your other UI components:
+
+   ```r
+   ui <- fluidPage(
+     useShinyjs(),  # Initialize shinyjs
+
+     # Add the spinner (replace with your desired HTML/CSS for the spinner)
+     tags$div(class = "spinner", "Loading..."),
+
+     # ... other UI components ...
+
+     actionButton("query_button", "Send Query")
+   )
+   ```
+
+   Replace `tags$div(class = "spinner", "Loading...")` with your desired HTML/CSS for the spinner. You can style the spinner using custom CSS.
+
+5. Use `shinyjs` in the `server` Function:
+
+   In the `server` function, use `shinyjs` to show and hide the spinner as needed:
 
    ```r
    server <- function(input, output, session) {
-     # ... other server code ...
+     observeEvent(input$query_button, {
+       shinyjs::js$showSpinner()  # Show the spinner before executing the query
 
-     output$query_spinner <- renderUI({
-       # Render the spinner in the UI
-       spinner("query_spinner")
+       # Execute your query or time-consuming operation here
+       # Replace this with your actual query execution code
+       Sys.sleep(3)  # Simulate a delay of 3 seconds
+
+       shinyjs::js$hideSpinner()  # Hide the spinner after query execution
      })
-
-     # ... other server code ...
    }
    ```
 
-That's it! With these steps, when you click the button to execute the query, the loading spinner will be displayed in the UI while the query is running. Once the query execution is complete, the spinner will disappear, and the results or any other outputs will be displayed in the UI. The `shinycssloaders` package offers different styles and customization options for the loading spinner. You can explore those options in the package documentation to find the one that best fits your Shiny app's style.
+   Replace `Sys.sleep(3)` with your actual query execution code.
+
+With these changes, when you click the "Send Query" button, the spinner will be displayed while the query is running. Once the query execution is complete, the spinner will disappear, and the results or any other outputs will be displayed in the UI. Remember to customize the spinner's appearance using CSS to match your app's style.
