@@ -1,9 +1,10 @@
 # server.R
 library(shiny)
+library(shinydashboard)
 library(log4r)
 
-# Define the logger
-logger <- log4r::logger("my_app")
+# Initialize the logger
+logger <- log4r::logger()
 
 # Configure the appender to log to a file
 log_file <- file("app.log")
@@ -11,26 +12,23 @@ appender <- log4r::fileAppender("file_appender", file = log_file)
 log4r::appender(logger) <- appender
 
 # Set log level (DEBUG, INFO, WARN, ERROR, FATAL)
-log4r::threshold(logger) <- "DEBUG"
+log4r::threshold(logger) <- "INFO"  # Adjust log level as needed
 
-function(input, output, session) {
-  # Your server logic goes here...
+server <- function(input, output) {
 
-  # Example: Log an info message when a button is clicked
-  observeEvent(input$button_click, {
-    log4r::info(logger, "Button clicked.")
-    # Your other code here...
+  # Function to log button clicks
+  log_button_click <- function(button_name) {
+    log4r::info(logger, paste("Button clicked:", button_name))
+  }
+
+  # Observe button clicks and log them
+  observeEvent(input$count, {
+    log_button_click("Progress Button")
+  })
+  observeEvent(input$approval, {
+    log_button_click("Approval Button")
   })
 
-  # Example: Log an error when an error occurs
-  observeEvent(input$error_button_click, {
-    tryCatch({
-      # Your code that may raise an error
-      stop("An example error occurred.")
-    }, error = function(e) {
-      log4r::error(logger, "An error occurred:", conditionMessage(e))
-      log4r::error(logger, "Stack Trace:", conditionCall(e))
-    })
-  })
+  # ... Your other server logic ...
 
 }
