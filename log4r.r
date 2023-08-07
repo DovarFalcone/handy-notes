@@ -6,8 +6,11 @@ library(log4r)
 logger <- log4r::logger()
 
 # Initialize the logger to log to a file
-appender <- log4r::file_appender("app.log", append = TRUE, threshold = "INFO")
+appender <- log4r::file_appender("app.log", append = TRUE)
 log4r::add_appender(logger, appender)
+
+# Set the logging level
+log4r::log_threshold(logger, "INFO")
 
 # Define the Shiny server function
 server <- function(input, output, session) {
