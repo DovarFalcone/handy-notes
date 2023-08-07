@@ -3,9 +3,12 @@ library(shiny)
 library(log4r)
 
 # Create a logger with a file appender
-appender <- fileAppender("app.log", threshold = "INFO", append = TRUE)
+appender <- fileAppender("app.log", append = TRUE)
 logger <- logger("shiny_app")
 addAppender(logger, appender)
+
+# Set the logging level for the appender
+setThreshold(appender, "INFO")
 
 # Define the Shiny server function
 server <- function(input, output, session) {
