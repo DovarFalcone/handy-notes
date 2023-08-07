@@ -2,42 +2,37 @@
 library(shiny)
 library(log4r)
 
-# Create a logger with a file appender
-appender <- fileAppender("app.log", append = TRUE)
-logger <- logger("shiny_app")
-
-# Set the logging level for the logger (Choose one of: ALL, TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF)
-setThreshold(logger, "INFO")
-
-# Add the appender to the logger
-addAppender(logger, appender)
+# Create a logger with a file appender and set the logging level
+logger <- log4r::logger("shiny_app")
+appender <- log4r::fileAppender("app.log", loglevel = "INFO", append = TRUE)
+log4r::add_appender(logger, appender)
 
 # Define the Shiny server function
 server <- function(input, output, session) {
   
   # Log session information at the start of the app
-  loginfo(logger, "Shiny app started.")
-  loginfo(logger, "Session ID:", session$token)
-  loginfo(logger, "Client address:", session$clientData$session$clientAddress)
-  loginfo(logger, "User agent:", session$clientData$session$userAgent)
-  loginfo(logger, "Server address:", session$clientData$url_protocol$HTTP_HOST)
-  loginfo(logger, "App path:", session$clientData$url_pathname)
+  log4r::loginfo(logger, "Shiny app started.")
+  log4r::loginfo(logger, "Session ID:", session$token)
+  log4r::loginfo(logger, "Client address:", session$clientData$session$clientAddress)
+  log4r::loginfo(logger, "User agent:", session$clientData$session$userAgent)
+  log4r::loginfo(logger, "Server address:", session$clientData$url_protocol$HTTP_HOST)
+  log4r::loginfo(logger, "App path:", session$clientData$url_pathname)
   
   observe({
     # Some computation or data manipulation
-    loginfo(logger, "Data manipulation completed.")
+    log4r::loginfo(logger, "Data manipulation completed.")
     # More code...
   })
   
   output$plot <- renderPlot({
     # Some plotting code
-    logdebug(logger, "Plot rendering started.")
+    log4r::logdebug(logger, "Plot rendering started.")
     # More code...
   })
   
   observeEvent(input$button, {
     # Some action taken upon button click
-    logwarn(logger, "Button clicked with input:", input$button)
+    log4r::logwarn(logger, "Button clicked with input:", input$button)
     # More code...
   })
   
@@ -45,7 +40,7 @@ server <- function(input, output, session) {
   
   # Log session information when the app is closed
   session$onSessionEnded(function() {
-    loginfo(logger, "Shiny app session ended.")
+    log4r::loginfo(logger, "Shiny app session ended.")
   })
 }
 
