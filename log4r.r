@@ -1,4 +1,4 @@
-# Load required libraries
+# server.R
 library(shiny)
 library(log4r)
 
@@ -13,13 +13,7 @@ log4r::appender(logger) <- appender
 # Set log level (DEBUG, INFO, WARN, ERROR, FATAL)
 log4r::threshold(logger) <- "DEBUG"
 
-# Define the UI
-ui <- fluidPage(
-  # Your UI components go here...
-)
-
-# Define the server logic
-server <- function(input, output, session) {
+function(input, output, session) {
   # Your server logic goes here...
 
   # Example: Log an info message when a button is clicked
@@ -40,6 +34,3 @@ server <- function(input, output, session) {
   })
 
 }
-
-# Run the Shiny app
-shinyApp(ui, server)
