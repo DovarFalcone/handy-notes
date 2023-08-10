@@ -23,23 +23,18 @@ ui <- dashboardPage(
 
 
 
+
 ##server.r
 library(shiny)
-library(shinylogs)
+library(shinydashboard)
 
 server <- function(input, output, session) {
-  # Show logs in the browser console
-  observeEvent(get_usage(), {
-    logs <- get_usage()$log_messages
-    logs <- paste(logs, collapse = "\n")
-    session$sendCustomMessage("consoleLogs", logs)
+  observe({
+    # Log a message to the browser console using custom message
+    session$sendCustomMessage("consoleLogs", "This is a log message from Shiny app.")
   })
-
-  # Track inputs change
-  track_usage(storage_mode = store_null())
-
+  
   # ... your server logic ...
-
 }
 
 shinyApp(ui, server)
