@@ -1,19 +1,26 @@
 ##ui.r
 library(shiny)
+library(shinydashboard)
 
-ui <- fluidPage(
-  tags$h2("Record inputs change"),
-  tags$script('
-    // JavaScript code to show logs in the browser console
-    Shiny.addCustomMessageHandler("consoleLogs", function(message) {
-      console.log(message);
-    });
-
-    // Rest of your Shiny UI components
-  '),
-  
-  # ... your UI components ...
+ui <- dashboardPage(
+  dashboardHeader(title = "My ShinyDashboard App"),
+  dashboardSidebar(
+    # ... your sidebar content ...
+  ),
+  dashboardBody(
+    tags$h2("Record inputs change"),
+    tags$script('
+      // JavaScript code to show logs in the browser console
+      Shiny.addCustomMessageHandler("consoleLogs", function(message) {
+        console.log(message);
+      });
+    '),
+    
+    # ... your UI components ...
+  )
 )
+
+
 
 
 ##server.r
@@ -36,3 +43,4 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
