@@ -39,3 +39,22 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 
+##server.r with shinylogs
+library(shiny)
+library(shinylogs)
+
+server <- function(input, output, session) {
+  # temporary directory for writing logs
+  tmp <- tempdir()
+
+  # when app stop,
+  # navigate to the directory containing logs
+  onStop(function() {
+    browseURL(url = tmp)
+  })
+
+  # Store JSON with logs in the temp dir
+  track_usage(
+    storage_mode = store_json(path = tmp)
+  )
+  }
