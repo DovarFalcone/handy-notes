@@ -1,0 +1,1 @@
+This Power BI report serves as an initial proof of concept, developed expeditiously to provide preliminary insights. Please be aware that it may lack the refinement characteristic of a finalized product, as its primary aim is to demonstrate conceptual feasibility rather than embody a meticulously crafted solution.
