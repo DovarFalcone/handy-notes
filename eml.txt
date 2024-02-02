@@ -1,0 +1,19 @@
+Dear Team,
+
+I hope this message finds you well. I wanted to take a moment to express my gratitude to everyone for their outstanding contributions to the project this week. It's been filled with significant milestones, and I appreciate the collective effort to bring us closer to the successful completion of our goal. While there's still work ahead, we now have the momentum and resources to deliver the final product.
+
+Accomplishments this week:
+
+Revalidated the Source to Target document with the business, incorporating responses received from both business and support teams into the S2T document.
+Successfully tested the MFT pipeline, ensuring the seamless movement of all files with no data loss. Discussions with the MFT team have commenced, and we are on track for deploying the pipeline to production, with an anticipated go-live date of 2/13.
+Reviewed the Data Flow Diagram (DFD) with the Data Architect, obtaining signoff.
+Plans for the upcoming week:
+
+Saqib and Brennan will finalize the data model in ER Studio.
+DDLs will be generated and deployed to the development environment by Tushar and Ziwei.
+User story creation for modifying code related to SST and strategizing on how to manage historic data.
+Finalization and testing of the development build.
+A final review of the Data Model with Nandha.
+Additionally, we have initiated the development of a User Acceptance Testing (UAT) strategy with the business for the upcoming UAT phase.
+
+Thank you once again for your dedication and hard work. Let's continue this momentum into the next week as we move closer to our project goals.
